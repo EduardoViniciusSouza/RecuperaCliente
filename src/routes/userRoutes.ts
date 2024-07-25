@@ -1,6 +1,9 @@
 import { Router } from "express";
+import apiKeyMiddleware from "../middlewares/apiKeyMiddleware";
 
 const userRouter = Router();
+
+userRouter.use(apiKeyMiddleware);
 
 userRouter.get('/users'); //todos os usuarios
 userRouter.get('/users/:id'); // um unico usuario (id)

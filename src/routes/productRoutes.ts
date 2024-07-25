@@ -1,6 +1,9 @@
 import { Router } from "express";
+import apiKeyMiddleware from "../middlewares/apiKeyMiddleware";
 
 const productRouter = Router();
+
+productRouter.use(apiKeyMiddleware);
 
 productRouter.get('/products'); // todos os produtos
 productRouter.get('/products/:id'); // um produto (id)
