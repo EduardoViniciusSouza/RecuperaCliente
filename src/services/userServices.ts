@@ -1,7 +1,9 @@
 import { hashPassword } from "../utils/userBcrypt";
 import supabase from "../config/supabaseClient";
+import z from "zod";
+import { updateUserSchema, userSchema } from "../schemas/userSchema";
 
-export const createUser = async (userData: any) => { 
+export const createUser = async (userData: z.infer<typeof userSchema>) => { //Utilizando os schemas como objetos!
     const hashedPassword = await hashPassword(userData.senha); 
 
     const newUser = {
@@ -18,7 +20,7 @@ export const createUser = async (userData: any) => {
     return data; 
 }
 
-export const updateUser = async (id: string, userData: any) => {
+export const updateUser = async (id: string, userData: z.infer<typeof updateUserSchema>) => {
     if (userData.senha) {
         userData.senha = await hashPassword(userData.senha);
     }
@@ -53,7 +55,7 @@ export const getUserById = async(id: string) => {
 export const getAllUsers = async() => {
     const {data, error} = await supabase
     .from('usuario')
-    .select('*')
+    .select('*');
 
     if (error) throw error.message;
 
@@ -64,7 +66,7 @@ export const deleteUser = async(id: string) => {
     const {data, error} = await supabase
     .from('usuario')
     .delete()
-    .eq('id', id)
+    .eq('id', id);
 
     if (error) throw error.message;
 

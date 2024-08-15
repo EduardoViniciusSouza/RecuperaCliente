@@ -1,6 +1,8 @@
+import z from "zod";
 import supabase from "../config/supabaseClient";
+import { productSchema, updateProductSchema } from "../schemas/productSchema";
 
-export const createProduct = async (productData: any) => {
+export const createProduct = async (productData: z.infer<typeof productSchema>) => {
 
     const newProduct = {
         ...productData
@@ -15,7 +17,8 @@ export const createProduct = async (productData: any) => {
     return data; 
 }
 
-export const updateProduct = async (id: string, productData: any) => {
+export const updateProduct = async (id: number, productData: z.infer<typeof updateProductSchema>) => {
+
     const updatedProduct = {
         ...productData,
         id,
@@ -31,7 +34,7 @@ export const updateProduct = async (id: string, productData: any) => {
     return data;
 }
 
-export const getProductById = async (id: string) => {
+export const getProductById = async (id: number) => {
     const {data, error} = await supabase
     .from('produto')
     .select('*')
@@ -46,18 +49,18 @@ export const getProductById = async (id: string) => {
 export const getAllProducts = async() => {
     const {data, error} = await supabase
     .from('produto')
-    .select('*')
+    .select('*');
 
     if (error) throw error.message;
 
     return data; 
 }
 
-export const deleteProduct = async(id: string) => {
+export const deleteProduct = async(id: number) => {
     const {data, error} = await supabase
     .from('produto')
     .delete()
-    .eq('id', id)
+    .eq('id', id);
 
     if (error) throw error.message;
 

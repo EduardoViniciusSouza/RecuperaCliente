@@ -26,7 +26,7 @@ export const controllerUpdateProduct = async (req: Request, res: Response) => {
     }
 
     try {
-        const updatedProduct = await updateProduct(id, validation.data);
+        const updatedProduct = await updateProduct(Number(id), validation.data);
 
         res.status(200).json(updatedProduct);
     } catch (error: unknown) {
@@ -47,7 +47,7 @@ export const controllerGetProducts = async (req: Request, res: Response) => {
 export const controllerGetProductsById = async (req: Request, res: Response) => {
     const {id} = req.params;
     try {
-        const product = await getProductById(id);
+        const product = await getProductById(Number(id));
 
         res.status(200).json(product);
     } catch (error: unknown) {
@@ -58,7 +58,7 @@ export const controllerGetProductsById = async (req: Request, res: Response) => 
 export const controllerDeletProduct = async (req: Request, res: Response) => {
     const {id} = req.params;
     try {
-        deleteProduct(id);
+        deleteProduct(Number(id));
 
         res.status(200).json('Produto deletado');
     } catch (error: unknown) {
