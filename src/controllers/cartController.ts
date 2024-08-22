@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getActiveCart, addProductToCart, getCartWithProducts} from "../services/cartService";
+import { getActiveCart, addProductToCart, getCartWithProducts, removeProductOfTheCart} from "../services/cartService";
 
 export const controllerAddProduct = async (req: Request, res: Response) => {
     const {idUsuario, idProduto} = req.body;
@@ -44,5 +44,21 @@ export const controllerGetCartWithProducts = async (req: Request, res: Response)
         return res.status(200).json(cartWithProducts);
     } catch (error: any) {
         return res.status(500).json({error: 'falha ao obter carrinho'});
+    }
+}
+
+export const controllerRemoveProductOfTheCart = async (req: Request, res: Response) => {
+    const {idCarrinho, idProduto} = req.body;
+
+    if (!idProduto || !idCarrinho) {
+      return res.status(400).json({error: 'falta o idCarrinho e ou idProduto'});
+    }
+
+    try {
+        await removeProductOfTheCart(Number(idCarrinho),Number(idProduto));
+
+        res.status(200).json({message: 'Produto removido do carrinho'});
+    } catch (error: any) {
+        res.status(500).json({error: 'Falha ao remover produdo do carrinho'});
     }
 }
