@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getActiveCart, addProductToCart, getCartWithProducts, removeProductOfTheCart} from "../services/cartService";
+import { getActiveCart, addProductToCart, getCartWithProducts, removeProductOfTheCart, getBuyedCarts} from "../services/cartService";
 
 export const controllerAddProduct = async (req: Request, res: Response) => {
     const {idUsuario, idProduto} = req.body;
@@ -12,7 +12,7 @@ export const controllerAddProduct = async (req: Request, res: Response) => {
 
         return res.status(200).json({message: 'produto cadastrado!'});
     } catch (error: any) {
-        return res.status(500).json({error: 'falha ao adicionar produto ao carrinho'})
+        return res.status(500).json({error: 'falha ao adicionar produto ao carrinho'});
     }
 }
 
@@ -27,7 +27,22 @@ export const controllerGetActiveCart = async (req: Request, res: Response) => {
 
         return res.status(200).json(carrinho);
     } catch (error: any) {
-        return res.status(500).json({error: 'falha ao encontrar carrinho'})
+        return res.status(500).json({error: 'falha ao encontrar carrinho'});
+    }
+}
+
+export const controllerGetBuyedCarts = async(req: Request, res: Response) => {
+    const {idUsuario} = req.params; 
+
+    if (!idUsuario) {
+        return res.status(400).json({error: 'falta o idUsuario'});
+    }
+    try {
+        const buyedCarts = await getBuyedCarts(Number(idUsuario)); 
+
+        return res.status(200).json(buyedCarts);
+    } catch (error: any) {
+        return res.status(500).json({error: 'Falha ao buscar carrinhos!'}); 
     }
 }
 
